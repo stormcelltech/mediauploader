@@ -1,0 +1,51 @@
+{
+    "name": "stormcelltech/mediauploader",
+    "description": "Laravel media upload and management package for Laravel with image processing, thumbnails, and multi-format support",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "media",
+        "upload",
+        "image",
+        "processing",
+        "thumbnails",
+        "intervention-image"
+    ],
+    "authors": [
+        {
+            "name": "Victor Nwachukwu",
+            "email": "victor@stormcelltech.com"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "laravel/framework": "^10.0|^11.0|^12.0|^13.0",
+        "intervention/image": "^4.0",
+        "enshrined/svg-sanitize": "^0.22"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "orchestra/testbench": "^8.0|^9.0",
+        "laravel/pint": "^1.0"
+    },
+   "autoload": {
+    "psr-4": {
+        "StormcellTech\\MediaUploader\\": "src/"
+    }
+},
+    "autoload-dev": {
+        "psr-4": {
+            "StormcellTech\\MediaUploader\\Tests\\": "tests/"
+        }
+    },
+   "extra": {
+    "laravel": {
+        "providers": [
+           "StormcellTech\\MediaUploader\\MediaUploaderServiceProvider"
+        ]
+    }
+},
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
