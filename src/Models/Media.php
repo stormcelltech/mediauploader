@@ -1,6 +1,6 @@
 <?php
 
-namespace StormcellTech\MediaUploader\Models;
+namespace StormcellTech\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

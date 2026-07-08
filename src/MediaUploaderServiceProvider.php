@@ -1,10 +1,10 @@
 <?php
 
-namespace StormcellTech\MediaUploader;
+namespace StormcellTech;
 
 use Illuminate\Support\ServiceProvider;
 use StormcellTech\MediaUploader\Console\InstallPackageCommand;
-use StormcellTech\MediaUploader\MediaUploader;
+use StormcellTech\MediaUploader;
 
 
 class MediaUploaderServiceProvider extends ServiceProvider
