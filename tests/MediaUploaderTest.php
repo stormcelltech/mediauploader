@@ -105,9 +105,10 @@ class MediaUploaderTest extends TestCase
 
         $this->uploader->deleteMedia($media->original_path, $media->thumbnails, 'public');
 
-        Storage::disk('public')->assertDoesNotExist($media->original_path);
+
+        Storage::disk('public')->assertMissing($media->original_path);
         foreach ($media->thumbnails as $thumbPath) {
-            Storage::disk('public')->assertDoesNotExist($thumbPath);
+            Storage::disk('public')->assertMissing($thumbPath);
         }
     }
 }
