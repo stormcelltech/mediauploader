@@ -431,10 +431,8 @@ Inject the `MediaUploader` service into your controller.
 
 ```php
 use App\Http\Resources\Media\MediaResource;
-use App\Services\MediaUploader;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Validator;
+use StormcellTech\MediaUploader;
+
 
 public function upload(Request $request, MediaUploader $uploader)
 {
@@ -557,7 +555,7 @@ public function update(Request $request, Media $medium)
 Delete both the physical files and the database record.
 
 ```php
-use App\Services\MediaUploader;
+use StormcellTech\MediaUploader;
 
 public function destroy(Media $medium, MediaUploader $uploader)
 {
