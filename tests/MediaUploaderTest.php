@@ -9,7 +9,6 @@ use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver as GdDriver;
 use StormcellTech\MediaUploader;
 use StormcellTech\Models\Media;
-use Tests\TestCase;
 
 class MediaUploaderTest extends TestCase
 {
