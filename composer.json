@@ -26,23 +26,23 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^10.5|^11.0|^12.0",
-        "orchestra/testbench": "^8.0|^9.0|^10.0|^11.0",
+        "orchestra/testbench": "^8.0|^9.0|^10.0|^11.0|^12.0",
         "laravel/pint": "^1.0"
     },
     "autoload": {
         "psr-4": {
-            "StormcellTech\\MediaUploader\\": "src/"
+            "StormcellTech\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "StormcellTech\\MediaUploader\\Tests\\": "tests/"
+            "StormcellTech\\Tests\\": "tests/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-               "StormcellTech\\MediaUploader\\MediaUploaderServiceProvider"
+               "StormcellTech\\MediaUploaderServiceProvider"
             ]
         }
     },

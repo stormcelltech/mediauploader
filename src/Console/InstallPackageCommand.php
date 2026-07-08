@@ -1,6 +1,6 @@
 <?php
 
-namespace StormcellTech\MediaUploader\Console;
+namespace StormcellTech\Console;
 
 use Illuminate\Console\Command;
 
@@ -29,10 +29,9 @@ class InstallPackageCommand extends Command
         $this->newLine();
         $this->info('Step 1: Exporting package assets and migrations...');
 
-        // This command publishes assets, configurations, and migrations 
-        // defined in your service provider under the main provider class namespace
+        // Corrected provider string value to align with the actual boot provider class paths
         $this->call('vendor:publish', [
-            '--provider' => 'StormcellTech\MediaUploader\MediaUploaderServiceProvider',
+            '--provider' => 'StormcellTech\MediaUploaderServiceProvider',
             '--force'    => true
         ]);
 

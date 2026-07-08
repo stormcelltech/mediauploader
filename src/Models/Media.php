@@ -39,9 +39,6 @@ class Media extends Model
 
     /**
      * Get the owning user.
-     * 
-     * This is a flexible relationship that works with any User model.
-     * Override the class in your app's User model if needed.
      */
     public function user()
     {
@@ -65,55 +62,35 @@ class Media extends Model
      */
     public function getUrl(?string $size = null): string
     {
-        /**
-         * Disk fallback:
-         * - Use stored disk if available
-         * - Default to public disk
-         */
         $disk = $this->disk ?? 'public';
 
-        /**
-         * No size requested → return original image
-         */
         if ($size === null) {
             return Storage::disk($disk)->url($this->original_path);
         }
 
-        /**
-         * Normalize thumbnails into array
-         */
         $thumbs = is_array($this->thumbnails) ? $this->thumbnails : [];
 
-        /**
-         * Exact match (e.g. 300x300)
-         */
-        if (isset($thumbs[$size]) && Storage::disk($disk)->exists($thumbs[$size])) {
+        // Exact match (e.g. 300x300)
+        if (isset($thumbs[$size])) {
             return Storage::disk($disk)->url($thumbs[$size]);
         }
 
-        /**
-         * Variant fallback (e.g. 300x300_webp, 300x300_jpg)
-         */
+        // Variant fallback keys (e.g. 300x300_webp, 300x300_jpg)
         foreach (["{$size}_webp", "{$size}_jpg", "{$size}_jpeg", "{$size}_png"] as $key) {
-            if (isset($thumbs[$key]) && Storage::disk($disk)->exists($thumbs[$key])) {
+            if (isset($thumbs[$key])) {
                 return Storage::disk($disk)->url($thumbs[$key]);
             }
         }
 
-        /**
-         * Final thumbnail fallback:
-         * return the first available thumbnail
-         */
+        // Fallback: return the first available thumbnail if any exist
         if (!empty($thumbs)) {
             $first = reset($thumbs);
-            if ($first && Storage::disk($disk)->exists($first)) {
+            if ($first) {
                 return Storage::disk($disk)->url($first);
             }
         }
 
-        /**
-         * Absolute final fallback: original image
-         */
+        // Absolute final fallback: original image
         return Storage::disk($disk)->url($this->original_path);
     }
 

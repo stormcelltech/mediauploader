@@ -12,7 +12,7 @@ use Intervention\Image\Drivers\Gd\Driver as GdDriver;
 use Intervention\Image\Format;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Interfaces\ImageInterface;
-use StormcellTech\MediaUploader\Models\Media;
+use StormcellTech\Models\Media;
 
 class MediaUploader
 {
