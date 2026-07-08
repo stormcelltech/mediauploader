@@ -4,7 +4,7 @@ namespace StormcellTech\MediaUploader;
 
 use Illuminate\Support\ServiceProvider;
 use StormcellTech\MediaUploader\Console\InstallPackageCommand;
-use StormcellTech\MediaUploader\Services\MediaUploader;
+use StormcellTech\MediaUploader\MediaUploader;
 
 
 class MediaUploaderServiceProvider extends ServiceProvider
@@ -47,10 +47,6 @@ class MediaUploaderServiceProvider extends ServiceProvider
             __DIR__ . '/resources/views/components' => resource_path('views/components/media-upload'),
         ], 'media-upload-components');
 
-        // Publish assets (JavaScript, CSS)
-        $this->publishes([
-            __DIR__ . '/resources/assets' => public_path('vendor/media-upload'),
-        ], 'media-upload-assets');
 
         // Load views
         $this->loadViewsFrom(

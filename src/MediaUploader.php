@@ -1,6 +1,6 @@
 <?php
 
-namespace StormcellTech\MediaUploader\Services;
+namespace StormcellTech\MediaUploader;
 
 use enshrined\svgSanitize\Sanitizer;
 use Illuminate\Http\UploadedFile;

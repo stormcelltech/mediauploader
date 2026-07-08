@@ -86,13 +86,6 @@ return [
         'video/x-msvideo',
     ],
 
-    /**
-     * API endpoints configuration
-     */
-    'api' => [
-        'prefix' => 'media',
-        'middleware' => ['auth:sanctum'],
-    ],
 
     /**
      * Delete related files when media is deleted

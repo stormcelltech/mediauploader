@@ -1,73 +1,490 @@
 # Laravel MediaUploader
 
-A premium, lightweight, self-contained media management and file uploading ecosystem for Laravel. It provides a modular backend combined with a vanilla JavaScript drag-and-drop client interface styled with Tailwind CSS.
+A complete media management solution for Laravel featuring automatic image optimization, thumbnail generation, a built-in media library, Blade components, and a dependency-free JavaScript uploader.
+
+The package is designed to work out of the box while remaining fully customizable.
 
 ---
 
-## Features
+# Features
 
-- **Zero-Build Overhead:** Clean vanilla JavaScript frontend engine—no heavy framework compile dependencies.
-- **Automated Lifecycle Management:** Seamless Artisan command handles asset distribution and migration sync blocks.
-- **Web Session Authentication:** Securely routes communications over `web` middleware stacks to leverage native session state and absolute CSRF verification.
-- **Smart State Persistence:** Utilizes a persistent hidden input element that tracks database primary media record IDs rather than temporary file strings.
-- **Polished UX Matrix:** Includes drag-and-drop bindings, image preview resolution, modal management, and micro-animations out-of-the-box.
+- 📁 File management system
+- 🖼 Automatic image thumbnail generation
+- 📤 Drag & Drop uploader
+- 📚 Built-in media library
+- 🔍 Search and pagination
+- 🎯 Blade components
+- 🚀 Zero-build vanilla JavaScript uploader
+- 🔒 Laravel authentication support
+- 🔐 CSRF protected
+- ☁️ Supports Local, Public and S3 disks
+- 📄 Supports images, documents, audio, video and archives
+- ⚡ Automatic image optimization
+- 🎨 Tailwind CSS UI
 
 ---
 
-## Installation
+# Requirements
 
-### 1. Require the Package via Composer
+- PHP 8.2+
+- Laravel 11+
+- Intervention Image v3
 
-Pull the core repository down into your application ecosystem:
+---
+
+# Installation
+
+Install via Composer.
 
 ```bash
 composer require stormcelltech/mediauploader
 ```
 
-## 2. Structural Engine Implementations
+Run the installer.
 
-### Single Resource Hydration Layout (Profile / Icon / Document)
+```bash
+php artisan mediauploader:install
+```
 
-To initialize a file selection box that updates a single database column (e.g. `logo_media_id`), bind an absolute structural integer primary key to the initialization state:
+The installer publishes:
 
-```html
+```
+config/media-upload.php
+
+database/migrations/create_media_table.php
+
+resources/views/components/uploader.blade.php
+
+resources/views/components/gallery.blade.php
+```
+
+Run migrations.
+
+```bash
+php artisan migrate
+```
+
+---
+
+# Quick Start
+
+Single uploader
+
+```blade
 <x-media-upload::uploader
     id="logo-uploader"
     name="logo_id"
-    :value="$settings->logo_id ?? null"
-    type="single"
+    :value="$settings->logo_id"
     text="Upload Logo"
 />
 ```
 
-# Configuration Data Attributes Matrix
+Gallery uploader
 
-This technical reference outlines the absolute data attribute API schema required by the `FileUploader.js` client engine. The runtime engine parses these attributes to build the component state, handle database hydration, and toggle UI states.
-
----
-
-## 3. Core Specification Matrix
-
-The following parameters must be declared as standard HTML5 attributes on the container DOM element designated with the `class="uploader"` marker:
-
-| Attribute Name       | Expected Data Type | Required | Default Value   | Functional Impact & Component Scope                                                                                                                                             |
-| :------------------- | :----------------- | :------: | :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `id`                 | `String`           | **Yes**  | _None_          | Unique DOM layout identifier. Used by the internal runtime registry (`FileUploader.instances`) to manage scoped event dispatching.                                              |
-| `data-fileinputname` | `String`           | **Yes**  | _None_          | Dictates the `name` attribute value applied to the hidden HTML `<input>` tag that stores the database entity ID.                                                                |
-| `data-hasfile`       | `Integer\|Array`   |    No    | `null`          | **Hydration Value:** Holds the primary database integer ID of the asset (or a JSON-serialized array of IDs for multi-mode). Prompts the engine to pull matching asset metadata. |
-| `data-uploadtype`    | `String`           |    No    | `'single'`      | Structurally controls the file array constraints. Supported tokens are `'single'` or `'multiple'`.                                                                              |
-| `data-uploadtext`    | `String`           |    No    | `'Select File'` | UI Typography Override. Customizes the main text string value rendered inside the primary drag-and-drop landing action wrapper.                                                 |
-| `data-preview`       | `String`           |    No    | `'true'`        | Textual boolean toggle (`'true'`/`'false'`). Dictates whether file thumbnail blocks and interactive image modules render inside the workspace.                                  |
-| `data-hidemediatab`  | `String`           |    No    | `'false'`       | Textual boolean toggle (`'true'`/`'false'`). When `'true'`, strips out the historical file library browser, restricting the interface to fresh file uploads only.               |
+```blade
+<x-media-upload::gallery
+    id="gallery"
+    name="gallery"
+/>
+```
 
 ---
 
-<div id="avatar-uploader"
-     class="uploader"
-     data-fileinputname="avatar_id"
-     data-hasfile="142"
-     data-uploadtype="single"
-     data-uploadtext="Upload Profile Photo"
-     data-preview="true"
-     data-hidemediatab="false">
-</div>
+# Blade Component Options
+
+| Property     | Description        |
+| ------------ | ------------------ |
+| id           | Unique uploader ID |
+| name         | Hidden input name  |
+| value        | Existing Media ID  |
+| text         | Upload button text |
+| type         | single or multiple |
+| preview      | Show preview       |
+| hideMediaTab | Hide media library |
+
+Example
+
+```blade
+<x-media-upload::uploader
+    id="avatar"
+    name="avatar_id"
+    :value="$user->avatar_id"
+    type="single"
+    text="Upload Avatar"
+    preview="true"
+/>
+```
+
+---
+
+# Configuration
+
+The package configuration is located at:
+
+```
+config/media-upload.php
+```
+
+## Storage
+
+```php
+'disk' => 'public',
+
+'directory' => 'uploads',
+```
+
+Supports any Laravel filesystem.
+
+- public
+- local
+- s3
+- custom disks
+
+---
+
+## Image Processing
+
+```php
+'images' => [
+
+    'max_width' => 4000,
+
+    'max_height' => 4000,
+
+    'thumbnails' => [
+
+        [300,300],
+
+        [500,500],
+
+    ],
+
+    'jpeg_quality' => 85,
+
+    'webp_quality' => 80,
+
+]
+```
+
+Images are automatically resized while preserving aspect ratio.
+
+---
+
+## File Size Limits
+
+```php
+'file_size_limits' => [
+
+    'image' => 50 MB,
+
+    'document' => 100 MB,
+
+    'archive' => 500 MB,
+
+    'audio' => 200 MB,
+
+    'video' => 1 GB,
+
+]
+```
+
+---
+
+## Allowed File Types
+
+Supports
+
+### Images
+
+- PNG
+- JPG
+- JPEG
+- GIF
+- WEBP
+- SVG
+
+### Documents
+
+- PDF
+- DOC
+- DOCX
+- XLS
+- XLSX
+- PPT
+- PPTX
+- TXT
+- CSV
+- ODT
+- ODS
+- ODP
+
+### Archives
+
+- ZIP
+- RAR
+- 7Z
+- GZIP
+
+### Audio
+
+- MP3
+- WAV
+- AAC
+- OGG
+- FLAC
+
+### Video
+
+- MP4
+- WEBM
+- AVI
+- MOV
+
+---
+
+# JavaScript Uploader
+
+The package ships with a vanilla JavaScript uploader.
+
+Example
+
+```html
+<div
+  id="logo-uploader"
+  class="uploader"
+  data-fileinputname="logo_id"
+  data-uploadtext="Upload Logo"
+  data-uploadtype="single"
+></div>
+```
+
+Initialize automatically
+
+```javascript
+import "stormcelltech-fileuploader";
+```
+
+---
+
+# MediaUploader Service
+
+The package exposes a MediaUploader service for storing files programmatically.
+
+```php
+use StormcellTech\MediaUploader\Services\MediaUploader;
+
+public function store(MediaUploader $uploader)
+{
+    $media = $uploader->store(
+        request()->file('file'),
+        'public',
+        'uploads',
+        auth()->id()
+    );
+
+    return $media;
+}
+```
+
+---
+
+# Media Model
+
+Every upload returns a Media model.
+
+```php
+$media->id;
+
+$media->filename;
+
+$media->mime_type;
+
+$media->size;
+
+$media->disk;
+
+$media->original_path;
+
+$media->thumbnails;
+```
+
+Useful helper methods
+
+```php
+$media->getUrl();
+
+$media->getUrl('300x300');
+
+$media->getReadableSize();
+```
+
+---
+
+# API Routes
+
+The package automatically registers the following endpoints.
+
+| Method | Endpoint                | Description    |
+| ------ | ----------------------- | -------------- |
+| GET    | /media/list             | List media     |
+| GET    | /media/search/{keyword} | Search media   |
+| GET    | /media/{id}/get         | Retrieve media |
+| POST   | /media/upload           | Upload file    |
+| DELETE | /media/{id}/delete      | Delete media   |
+
+---
+
+# Upload Response
+
+```json
+{
+  "status": 200,
+  "message": "File uploaded successfully",
+  "data": {
+    "id": 15,
+    "filename": "logo.png",
+    "mime_type": "image/png",
+    "thumb": "...",
+    "url": "..."
+  }
+}
+```
+
+---
+
+# Retrieve Media
+
+```
+GET /media/{id}/get
+```
+
+Returns
+
+```json
+{
+  "status": 200,
+  "data": {
+    "id": 15,
+    "filename": "logo.png",
+    "thumb": "..."
+  }
+}
+```
+
+---
+
+# Delete Media
+
+```
+DELETE /media/{id}/delete
+```
+
+Returns
+
+```json
+{
+  "status": 200,
+  "message": "Media deleted successfully"
+}
+```
+
+---
+
+# Searching Media
+
+```
+GET /media/search/logo
+```
+
+Supports pagination.
+
+```
+GET /media/list?page=2&per_page=20
+```
+
+---
+
+# Storage Structure
+
+```
+storage/
+
+    app/
+
+        public/
+
+            uploads/
+
+                original/
+
+                300x300/
+
+                500x500/
+```
+
+---
+
+# Events
+
+The JavaScript uploader dispatches
+
+```javascript
+file: selected;
+```
+
+Example
+
+```javascript
+document
+  .getElementById("logo-uploader")
+  .addEventListener("file:selected", (event) => {
+    console.log(event.detail);
+  });
+```
+
+---
+
+# Security
+
+- Authentication protected
+- CSRF protected
+- User ownership validation
+- MIME type validation
+- File size validation
+
+---
+
+# Customization
+
+You can customize:
+
+- Storage disk
+- Upload directory
+- Thumbnail sizes
+- Image quality
+- Maximum dimensions
+- Allowed MIME types
+- Maximum upload sizes
+
+without modifying package code.
+
+---
+
+# Browser Support
+
+Supports all modern browsers.
+
+- Chrome
+- Firefox
+- Safari
+- Edge
+
+---
+
+# License
+
+MIT License
+
+Copyright (c) 2026 Storm Cell Tech
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software.

@@ -12,9 +12,3 @@
     data-hasfile="{{ is_array($value) ? json_encode($value) : $value }}" data-uploadtype="{{ $type }}"
     data-uploadtext="{{ $text }}" data-preview="{{ $preview }}" data-hidemediatab="{{ $hideMediaTab }}"
     {{ $attributes->merge(['class' => 'uploader']) }}></div>
-
-@once
-    @push('scripts')
-        <script type="module" src="{{ asset('vendor/media-upload/js/FileUploader.js') }}"></script>
-    @endpush
-@endonce
