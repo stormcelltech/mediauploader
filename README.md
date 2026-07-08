@@ -397,7 +397,7 @@ MediaUploader gives you complete control over how media is uploaded, retrieved, 
 A typical route definition looks like this.
 
 ```php
-use App\Http\Controllers\Tenant\Admin\MediaController;
+use App\Http\Controllers\MediaController;
 
 Route::prefix('media')
     ->middleware(['auth'])
@@ -447,15 +447,13 @@ public function upload(Request $request, MediaUploader $uploader)
         ], Response::HTTP_BAD_REQUEST);
     }
 
-    $tenantFolder = tenant() ? tenant('id') : 'global';
-
-    $directory = "{$tenantFolder}/uploads/media";
+    $directory = "/uploads/media";
 
     $media = $uploader->store(
         $request->file('file'),
-        tenant() ? 'tenant' : 'landlord',
+       'public' // which disk are you saving the files
         $directory,
-        auth()->id()
+        auth()->id() // user uploading file
     );
 
     return response()->json([
