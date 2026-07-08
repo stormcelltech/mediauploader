@@ -63,7 +63,6 @@
         @endforelse
     </div>
 </div>
-
 @pushOnce('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
