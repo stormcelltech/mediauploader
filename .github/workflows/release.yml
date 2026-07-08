@@ -29,11 +29,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          # 1. Update the framework constraint inline without moving it to require-dev
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
-
-          # 2. Update all dependencies with audit policies ignored to bypass security advisory blocks on older versions
-          composer update --prefer-stable --no-interaction --no-progress --audit-policy=ignore
+          composer update --prefer-stable --no-interaction --no-progress --no-audit --no-security-blocking
 
       - name: Execute tests
         run: vendor/bin/phpunit
